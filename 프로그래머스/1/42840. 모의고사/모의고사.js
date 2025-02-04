@@ -1,53 +1,29 @@
 function solution(answers) {
-    var answer = [];
+    const scores = [0, 0, 0];
     
-    let pattern1 = [1, 2, 3, 4, 5];
-    let score1 = 0;
+    const patterns = [
+        [1, 2, 3, 4, 5],
+        [2, 1, 2, 3, 2, 4, 2, 5],
+        [3, 3, 1, 1, 2, 2, 4, 4, 5, 5]
+    ]
     
-    for(let i = 0; i < answers.length; i++) {
-        if (answers[i] === pattern1[i % pattern1.length]) {
-            score1++;
+    for (const [i, answer] of answers.entries()) {
+        for (const [j, pattern] of patterns.entries()) {
+            if (answer === pattern[i % pattern.length]) {
+                scores[j] += 1;
+            }
         }
     }
     
-    let pattern2 = []
-    let sub1_pattern = [1, 3, 4, 5];
-    let score2 = 0;
+
+    const highestScores = [];
     
-    
-    for(let i = 0; i < answers.length; i++) {
-        if (i % 2 === 0) {
-            pattern2.push(2);
-        } else {
-            pattern2.push(sub1_pattern[Math.floor((i / 2) % sub1_pattern.length)])
-        }
-        
-        if (answers[i] === pattern2[i % pattern2.length]) {
-            score2++;
-        }
-    } 
-    
-    let pattern3 = [];
-    let sub_pattern2 = [3, 1, 2, 4, 5]
-    let score3 = 0;
-    
-    for(let i = 0; i < answers.length; i++) {
-        let index = Math.floor(i / 2) % sub_pattern2.length;
-        pattern3.push(sub_pattern2[index]);
-    }
-    
-    for(let i = 0; i < answers.length; i ++) {
-        if (answers[i] === pattern3[i]) {
-            score3++
+    for (let i=0; i < scores.length; i++) {
+        if (scores[i] === Math.max(...scores)) {
+            highestScores.push(i + 1)
         }
     }
     
     
-    let maxScore = Math.max(score1, score2, score3);
-    
-    if (score1 === maxScore) answer.push(1);
-    if (score2 === maxScore) answer.push(2);
-    if (score3 === maxScore) answer.push(3);
-    
-    return answer;
+    return highestScores;
 }
