@@ -1,24 +1,52 @@
-// 1. goal 카드 뭉치를 기준으로 카드뭉치1, 카드뭉치2에서 하나씩 비교함
-// 2. goal에서 뽑은 단어가 존재하는 쪽을 찾음 -> 그리고 찾은 단어를 goal과 카드뭉치에서 제거함
-// 3. 존재하지 않으면 다음 카드뭉치에서 찾음 -> 마찬가지로 찾은 단어 제거
-// 4. 두 카드뭉치에도 존재하지 않으면 "No"
-// 5. 계속 반복해서 goal 카드뭉치가 빌 때까지 반복함
+// 1. goal의 front와 cards1 or cards2의 front 값 비교
+// 1-1. 사용할 수 있는 카드가 O -> 해당 큐와 goal에서 각각 pop
+// 1-2. 사용할 수 있는 카드가 X -> 아무 동작 X
+// 1-3. cards1, cards2 중 빈 곳은 체크하지 않음
+
+class Queue {
+    items = [];
+    front = 0;
+    rear = 0;
+    
+    constructor(array) {
+        this.items = array;
+        this.rear = array.length;
+    }
+    
+    push(item) {
+        this.items.push(item);
+        this.rear++;
+    }
+    
+    pop() {
+        return this.items[this.front++];
+    }
+    
+    first() {
+        return this.items[this.front];
+    }
+    
+    isEmpty() {
+        return this.front === this.rear;
+    }
+}
 
 function solution(cards1, cards2, goal) {
-    let answer = 'Yes';
+    cards1 = new Queue(cards1);
+    cards2 = new Queue(cards2);
+    goal = new Queue(goal);
     
-    while(goal.length > 0) {
-        if (goal[0] === cards1[0]) {
-            goal.shift();
-            cards1.shift();
-        } else if (goal[0] === cards2[0]) {
-            goal.shift();
-            cards2.shift();
+    while (!goal.isEmpty()) {
+        if (!cards1.isEmpty() && cards1.first() === goal.first()) {
+            cards1.pop();
+            goal.pop();
+        } else if (!cards2.isEmpty() && cards2.first() === goal.first()) {
+            cards2.pop();
+            goal.pop();
         } else {
-            answer = "No";
             break;
         }
     }
     
-    return answer;
+    return goal.isEmpty() ? "Yes" : "No";
 }
