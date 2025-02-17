@@ -1,35 +1,32 @@
+// 가장 많이 재생된 장르 구하기
+// 각 장르별로 많이 듣는 순으로 순서 정해서 2곡 뽑기 *재생횟수가 동일하면 고유번호 오름차순으로
+// 1,2 순서지켜서 고유번호 담기
+
 function solution(genres, plays) {
-    let answer = [];
-    const genresObj = {};
+    const genreObj = {};
     const playObj = {};
     
-    // 장르별 총 재생 횟수, 각 곡의 재생 횟수 저장
     for (let i = 0; i < genres.length; i++) {
         genre = genres[i];
         play = plays[i];
         
-        if (!(genre in genresObj)) {
-            genresObj[genre] = [];
+        if (!(genre in genreObj)) {
+            genreObj[genre] = [];
             playObj[genre] = 0;
         }
         
-        genresObj[genre].push([i, play]);
+        genreObj[genre].push([i, play]);
         playObj[genre] += play;
     }
     
-    // 총 재생 횟수가 많은 장르순으로 정렬
-    sortedGenres = Object.keys(playObj).sort((a, b) => {
-        return playObj[b] - playObj[a];
-    })
-    
-    // 각 장르 내에서 노래를 재생 횟수 순으로 정렬해 최대 2곡 선택
-    for (const genre of sortedGenres) {
-        sortedSongs = genresObj[genre].sort((a, b) => {
-            return a[1] === b[1] ? a[1] - b[1] : b[1] - a[1];
-        })
+    mostPlayGenres = Object.keys(playObj).sort((a, b) => playObj[b] - playObj[a]);
+
+    let answer = [];
+    for (const g of mostPlayGenres) {
+        mostPlaySong = genreObj[g].sort((a, b) => a[1] === b[1] ? a[1] - b[1] : b[1] - a[1]);
         
-        answer.push(...sortedSongs.slice(0, 2).map((song) => song[0]));
+        answer.push(...mostPlaySong.slice(0, 2).map((song) => song[0]));
     }
-    
     return answer;
+    
 }
