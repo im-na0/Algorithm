@@ -1,12 +1,15 @@
-// 위시리스트와 할인 품목을 객체로 만들어 동일한지 비교
+// 일수별로 할일 품목에서 10개씩 추출함
+// 추출한 할인 품목 리스트와 want 리스트가 일치하는지 비교함
 
-function isShallowEqual(obj1, obj2) {
-    const objkeys1 = Object.keys(obj1);
-    const objkeys2 = Object.keys(obj2);
+function isEqual(obj1, obj2) {
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
     
-    if (objkeys1.length !== objkeys2.length) return false;
+    if (keys1.length !== keys2.length) {
+        return false;
+    }
     
-    for (const key of objkeys1) {
+    for (const key of keys1) {
         const val1 = obj1[key];
         const val2 = obj2[key];
         
@@ -19,26 +22,26 @@ function isShallowEqual(obj1, obj2) {
 }
 
 function solution(want, number, discount) {
-    // want 배열 -> 객체로 변환
-    const wantObj = {};
+    const wantObj = {}; // 품목-수량
+    
+    
     for (let i = 0; i < want.length; i++) {
         wantObj[want[i]] = number[i];
     }
     
     let answer = 0;
     
-    // 특정일 i일에 회원가입 시 할인 품목 체크
     for (let i = 0; i < discount.length - 9; i++) {
-        const discount10d = {};
+        const discountObj = {}; // 품목-수량
         
         // i일 회원가입 시 할인 품목 담기
         for (let j = i; j < i + 10; j++) {
-            if (wantObj[discount[j]]) {
-                discount10d[discount[j]] = (discount10d[discount[j]] || 0) + 1;
+            if (wantObj[discount[i]]) {
+                discountObj[discount[j]] = (discountObj[discount[j]] || 0) + 1;
             }
         }
         
-        if (isShallowEqual(discount10d, wantObj)) {
+        if (isEqual(wantObj, discountObj)) {
             answer += 1;
         }
     }
